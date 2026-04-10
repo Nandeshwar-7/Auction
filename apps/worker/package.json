@@ -1,0 +1,22 @@
+{
+  "name": "@auction/worker",
+  "private": true,
+  "scripts": {
+    "dev": "node ./scripts/dev.mjs",
+    "deploy": "wrangler deploy",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@auction/shared": "*",
+    "postgres": "^3.4.5",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.7",
+    "@cloudflare/workers-types": "^4.20250620.0",
+    "@cloudflare/vitest-pool-workers": "^0.8.0",
+    "typescript": "^6.0.2",
+    "vitest": "^2.0.0",
+    "wrangler": "^3.101.0"
+  }
+}

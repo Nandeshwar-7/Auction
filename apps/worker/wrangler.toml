@@ -1,0 +1,22 @@
+# Local dev: load DATABASE_URL, ALLOWED_ORIGINS, SESSION_COOKIE_NAME from the monorepo root
+# `.env` via `npm run dev` (see scripts/dev.mjs). Hyperdrive uses
+# WRANGLER_HYPERDRIVE_LOCAL_CONNECTION_STRING_<BINDING> or falls back to DATABASE_URL.
+#
+# Production: set Hyperdrive id below; set [vars] in dashboard or add a production env block.
+
+name = "auction-worker"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[durable_objects.bindings]]
+name = "AUCTION_ROOM"
+class_name = "RoomDurableObject"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes  = ["RoomDurableObject"]
+
+[[hyperdrive]]
+binding = "DB"
+id = "54504e51a906476697bbc4ada19337fd"

@@ -1,0 +1,10 @@
+# The auction room backend has been migrated to a Cloudflare Worker (apps/worker/).
+# Workers are deployed via `wrangler deploy` — not as Docker containers.
+#
+# This Dockerfile is kept as a reference and is no longer used in production.
+# For local development, use `npm run dev:worker` (wrangler dev).
+#
+# See apps/worker/README.md for deployment instructions.
+
+FROM node:22-alpine
+RUN echo "Worker is deployed via Cloudflare, not Docker." && exit 0

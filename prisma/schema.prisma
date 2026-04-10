@@ -1,0 +1,188 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PlayerRole {
+  BATTER
+  BOWLER
+  ALL_ROUNDER
+  WICKETKEEPER
+}
+
+enum RoomStatus {
+  DRAFT
+  LIVE
+  COMPLETE
+}
+
+enum RoomPrivacy {
+  PRIVATE
+  PUBLIC
+}
+
+enum RoomParticipantRole {
+  HOST
+  PARTICIPANT
+  VIEWER
+}
+
+enum AuctionLotStatus {
+  PENDING
+  LIVE
+  SOLD
+  UNSOLD
+}
+
+model Player {
+  id         String      @id @default(cuid())
+  slug       String      @unique
+  name       String
+  role       PlayerRole
+  country    String
+  basePrice  Int
+  imageUrl   String
+  accentFrom String?
+  accentTo   String?
+  createdAt  DateTime    @default(now())
+  lots       AuctionLot[]
+  bids       Bid[]
+}
+
+model Team {
+  id             String            @id @default(cuid())
+  code           String            @unique
+  name           String
+  purse          Int
+  color          String
+  secondaryColor String?
+  createdAt      DateTime          @default(now())
+  participants   RoomParticipant[]
+  roomTeams      RoomTeam[]
+  wonLots        AuctionLot[]      @relation("AuctionLotWinner")
+  bids           Bid[]
+}
+
+model User {
+  id               String            @id @default(cuid())
+  name             String
+  email            String?           @unique
+  avatarUrl        String?
+  createdAt        DateTime          @default(now())
+  sessions         Session[]
+  hostedRooms      Room[]            @relation("RoomHost")
+  roomParticipants RoomParticipant[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Room {
+  id                     String            @id @default(cuid())
+  code                   String            @unique
+  name                   String
+  status                 RoomStatus        @default(DRAFT)
+  privacy                RoomPrivacy       @default(PRIVATE)
+  hostUserId             String?
+  hostToken              String            @unique
+  currentLotId           String?
+  isPaused               Boolean           @default(false)
+  timerEndsAt            DateTime?
+  pausedRemainingSeconds Int?
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  participants           RoomParticipant[]
+  lots                   AuctionLot[]
+  bids                   Bid[]
+  roomTeams              RoomTeam[]
+  currentLot             AuctionLot?       @relation("RoomCurrentLot", fields: [currentLotId], references: [id], onDelete: SetNull)
+  hostUser               User?             @relation("RoomHost", fields: [hostUserId], references: [id], onDelete: SetNull)
+}
+
+model RoomParticipant {
+  id          String   @id @default(cuid())
+  roomId      String
+  userId      String?
+  teamId      String?
+  displayName String
+  isHost      Boolean  @default(false)
+  role        RoomParticipantRole @default(PARTICIPANT)
+  joinedAt    DateTime @default(now())
+  createdAt   DateTime @default(now())
+  room        Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  team        Team?    @relation(fields: [teamId], references: [id], onDelete: SetNull)
+
+  @@index([roomId])
+  @@index([userId])
+  @@index([teamId])
+}
+
+model AuctionLot {
+  id           String           @id @default(cuid())
+  roomId       String
+  playerId     String
+  order        Int
+  status       AuctionLotStatus @default(PENDING)
+  soldToTeamId String?
+  soldPrice    Int?
+  startedAt    DateTime?
+  closedAt     DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  room         Room             @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  player       Player           @relation(fields: [playerId], references: [id], onDelete: Restrict)
+  soldToTeam   Team?            @relation("AuctionLotWinner", fields: [soldToTeamId], references: [id], onDelete: SetNull)
+  currentForRoom Room[]         @relation("RoomCurrentLot")
+  bids         Bid[]
+
+  @@unique([roomId, order])
+  @@unique([roomId, playerId])
+  @@index([roomId, status])
+}
+
+model RoomTeam {
+  id             String   @id @default(cuid())
+  roomId         String
+  teamId         String
+  purseRemaining Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  room           Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  team           Team     @relation(fields: [teamId], references: [id], onDelete: Restrict)
+
+  @@unique([roomId, teamId])
+  @@index([roomId])
+  @@index([teamId])
+}
+
+model Bid {
+  id        String     @id @default(cuid())
+  roomId    String
+  lotId     String?
+  playerId  String
+  teamId    String
+  amount    Int
+  createdAt DateTime   @default(now())
+  room      Room       @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  lot       AuctionLot? @relation(fields: [lotId], references: [id], onDelete: SetNull)
+  player    Player     @relation(fields: [playerId], references: [id], onDelete: Restrict)
+  team      Team       @relation(fields: [teamId], references: [id], onDelete: Restrict)
+
+  @@index([roomId, createdAt])
+  @@index([playerId])
+  @@index([teamId])
+}
