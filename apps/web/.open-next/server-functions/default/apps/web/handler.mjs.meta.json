@@ -3697,7 +3697,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/apps/web/.next/server/chunks/207.js": {
-      "bytes": 18829,
+      "bytes": 19108,
       "imports": [],
       "format": "cjs"
     },
@@ -3713,7 +3713,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/apps/web/.next/server/chunks/559.js": {
-      "bytes": 14215,
+      "bytes": 14375,
       "imports": [],
       "format": "cjs"
     },
@@ -3755,7 +3755,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/apps/web/.next/server/app/room/[roomId]/page.js": {
-      "bytes": 77681,
+      "bytes": 77960,
       "imports": [
         {
           "path": ".open-next/server-functions/default/apps/web/node_modules/next/dist/shared/lib/router/utils/app-paths.js",
@@ -6686,13 +6686,13 @@
           "bytesInOutput": 525
         },
         ".open-next/server-functions/default/apps/web/.next/server/chunks/207.js": {
-          "bytesInOutput": 19107
+          "bytesInOutput": 19388
         },
         ".open-next/server-functions/default/apps/web/.next/server/chunks/554.js": {
           "bytesInOutput": 636241
         },
         ".open-next/server-functions/default/apps/web/.next/server/chunks/559.js": {
-          "bytesInOutput": 14464
+          "bytesInOutput": 14573
         },
         ".open-next/server-functions/default/apps/web/.next/server/chunks/611.js": {
           "bytesInOutput": 71834
@@ -6701,7 +6701,7 @@
           "bytesInOutput": 1827
         },
         ".open-next/server-functions/default/apps/web/.next/server/app/room/[roomId]/page.js": {
-          "bytesInOutput": 79558
+          "bytesInOutput": 79845
         },
         ".open-next/server-functions/default/apps/web/.next/server/app/create-room/page.js": {
           "bytesInOutput": 15877
@@ -6878,7 +6878,7 @@
           "bytesInOutput": 57307
         }
       },
-      "bytes": 2849776
+      "bytes": 2850453
     }
   }
 }

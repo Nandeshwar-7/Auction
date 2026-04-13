@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { getAuctionBackendHttpUrl } from "@/lib/auction-backend";
+import { getFrontendAuthPath } from "@/lib/frontend-runtime-config";
 import type { AuthUser } from "@auction/shared";
 import type { GuestAuthRequest, SessionResponse } from "@auction/shared";
 
@@ -22,7 +22,7 @@ export function useAuthSession() {
 
   const refreshSession = useCallback(async () => {
     try {
-      const response = await fetch(`${getAuctionBackendHttpUrl()}/api/auth/session`, {
+      const response = await fetch(getFrontendAuthPath("session"), {
         credentials: "include",
       });
       const payload = (await response.json()) as SessionResponse;
@@ -52,7 +52,7 @@ export function useAuthSession() {
   }, [refreshSession]);
 
   const signInGuest = useCallback(async (input: GuestAuthRequest) => {
-    const response = await fetch(`${getAuctionBackendHttpUrl()}/api/auth/guest`, {
+    const response = await fetch(getFrontendAuthPath("guest"), {
       method: "POST",
       credentials: "include",
       headers: {
@@ -75,7 +75,7 @@ export function useAuthSession() {
   }, []);
 
   const signOut = useCallback(async () => {
-    await fetch(`${getAuctionBackendHttpUrl()}/api/auth/logout`, {
+    await fetch(getFrontendAuthPath("logout"), {
       method: "POST",
       credentials: "include",
     });
