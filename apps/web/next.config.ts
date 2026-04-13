@@ -1,4 +1,10 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import type { NextConfig } from "next";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const monorepoRoot = path.join(__dirname, "../..");
 
 const allowedDevOrigins = [
   "http://localhost:3000",
@@ -12,6 +18,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   allowedDevOrigins,
   transpilePackages: ["@auction/shared"],
+  // Correct server trace roots in npm workspaces (fixes OpenNext / CF bundle resolution).
+  outputFileTracingRoot: monorepoRoot,
 };
 
 export default nextConfig;

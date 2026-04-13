@@ -8,6 +8,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "IPL Auction",
   description: "Premium IPL auction frontend shell built with Next.js and Tailwind CSS.",
+  icons: {
+    icon: "/player-silhouette.svg",
+  },
 };
 
 export default function RootLayout({

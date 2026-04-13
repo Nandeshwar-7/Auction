@@ -1,0 +1,33 @@
+{
+  "name": "auction-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n web,worker -c blue,yellow \"npm run dev -w @auction/web\" \"npm run dev -w @auction/worker\"",
+    "dev:web": "npm run dev -w @auction/web",
+    "dev:worker": "npm run dev -w @auction/worker",
+    "build": "npm run build -w @auction/web",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "test": "npm run test -w @auction/worker",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1",
+    "prisma": "^6.19.3",
+    "tsx": "^4.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "typescript": "^6.0.2"
+  }
+}

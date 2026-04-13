@@ -2,3 +2,9 @@ name = "auction-web"
 main = ".open-next/worker.js"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
+
+# OpenNext emits static files here; binding is required for env.ASSETS (images + public files).
+# Default asset-first routing: matching files are served from this directory, then the Worker runs.
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
